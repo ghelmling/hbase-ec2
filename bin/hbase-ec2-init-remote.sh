@@ -61,6 +61,11 @@ if [ "$EXTRA_PACKAGES" != "" ] ; then
   yum -y install ${pkg[@]:1}
 fi
 
+# Reformat sdb as xfs
+umount /mnt
+mkfs.xfs -f /dev/sdb
+mount -o noatime /dev/sdb /mnt
+
 # Ganglia
 
 if [ "$IS_MASTER" = "true" ]; then
@@ -82,11 +87,6 @@ else
          /etc/gmond.conf
   service gmond start
 fi
-
-# Reformat sdb as xfs
-umount /mnt
-mkfs.xfs -f /dev/sdb
-mount -o noatime /dev/sdb /mnt
 
 # Probe for additional instance volumes
 
